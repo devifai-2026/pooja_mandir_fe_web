@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: pooja-mandir-fe
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: true
+    # SPA fallback: serve index.html for client-side routes (/book-pooja, /products)
+    # so a direct visit or refresh doesn't 404.
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
